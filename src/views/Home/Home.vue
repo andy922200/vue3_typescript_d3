@@ -1,8 +1,14 @@
 <template>
-    <div class="home">
-        <img alt="Vue logo" src="../../assets/logo.png">
-        <div class="barChart"></div>
-    </div>
+    <el-row class="home">
+        <el-col :span="24" class="logos">
+            <img alt="D3 logo" class="logo" src="../../assets/D3Logo.svg">
+            <img alt="Vue logo" class="logo" src="../../assets/VueLogo.svg">
+            <img alt="TypeScript logo" class="logo" src="../../assets/TypeScriptLogo.svg">
+        </el-col>
+        <el-col :span="24">
+            <div class="barChart"></div>
+        </el-col>
+    </el-row>
 </template>
 
 <script lang="ts">
@@ -41,10 +47,31 @@ export default defineComponent({
             },
             maxValue: 300
         }
+        const barChartSettingsRWD = {
+            padding: {
+                top: 20,
+                right: 20,
+                bottom: 20,
+                left: 20
+            },
+            rect: {
+                color: 'steelblue'
+            },
+            text: {
+                color: 'white',
+                fontSize: '14px',
+                textAnchor: 'middle',
+                dy: '1em'
+            },
+            maxValue: 300
+        }
         onMounted(() => {
-            const testBarChart = new BarChart(barChartSettings)
-            testBarChart.defaultDraw(dataSet, '.barChart')
+            const barChartDiv = document.querySelector('.barChart')
+            const testBarChart = new BarChart(barChartSettingsRWD)
+            testBarChart.rwdDraw(dataSet, '.barChart', barChartDiv)
         })
     }
 })
 </script>
+
+<style lang="scss" src="./styles/Home.scss"></style>

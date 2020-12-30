@@ -1,0 +1,13 @@
+.nav {
+    padding: 30px;
+    width: 100%;
+
+    a {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+
+    .router-link-active {
+        color: #42b983;
+    }
+}
