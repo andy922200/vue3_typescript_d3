@@ -28,7 +28,12 @@ interface BarChartSettings extends Layout{
     };
 }
 
-export class BarChart {
+interface CleanMethods {
+    clear: (dom: Element | null) => void;
+    clearRwdListener: () => void;
+}
+
+export class BarChart implements CleanMethods {
     protected width: number;
     protected height: number;
     protected padding: Layout['padding'];
@@ -88,7 +93,13 @@ export class BarChart {
     }
 
     clear (dom: Element | null) {
-        if (dom) { dom.innerHTML = '' }
+        if (dom) {
+            dom.innerHTML = ''
+        }
+    }
+
+    clearRwdListener () {
+        d3.select(window).on('resize', null)
     }
 
     private rwdRendering (dom: string, dataSet: (Array<number>), width: number, height: number) {

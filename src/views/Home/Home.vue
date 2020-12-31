@@ -6,6 +6,17 @@
             <img alt="TypeScript logo" class="logo" src="../../assets/TypeScriptLogo.svg">
         </el-col>
         <el-col :span="24">
+            <el-switch
+                v-model="barChartTypeSwitch"
+                active-text="Normal Version"
+                inactive-text="RWD Version"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="changeBarChartType"
+            >
+            </el-switch>
+        </el-col>
+        <el-col :span="24">
             <div class="barChart"></div>
         </el-col>
     </el-row>
@@ -13,8 +24,10 @@
 
 <script lang="ts">
 import {
+    ref,
     reactive,
     onMounted,
+    onUnmounted,
     defineComponent
 } from 'vue'
 import {
@@ -24,7 +37,8 @@ import {
 export default defineComponent({
     name: 'Home',
     setup () {
-        const dataSet = reactive([70, 130, 120, 95, 170, 143])
+        const dataSet = reactive([70, 130, 120, 95, 170, 143, 200, 300])
+        const barChartTypeSwitch = ref(true)
         const barChartSettings = {
             width: 400,
             height: 400,
@@ -36,8 +50,8 @@ export default defineComponent({
             },
             rect: {
                 color: 'steelblue',
-                width: 50,
-                columnWidth: 60
+                width: 40,
+                columnWidth: 45
             },
             text: {
                 color: 'white',
@@ -45,14 +59,34 @@ export default defineComponent({
                 textAnchor: 'middle',
                 dy: '1em'
             },
-            maxValue: 400
+            maxValue: 500
         }
+        const testBarChart = new BarChart(barChartSettings)
 
         onMounted(() => {
-            const barChartDiv = document.querySelector('.barChart')
-            const testBarChart = new BarChart(barChartSettings)
-            testBarChart.rwdDraw(dataSet, '.barChart', barChartDiv)
+            testBarChart.defaultDraw(dataSet, '.barChart')
         })
+
+        onUnmounted(() => {
+            const barChartDiv = document.querySelector('.barChart')
+            testBarChart.clear(barChartDiv)
+        })
+
+        function changeBarChartType (status: boolean) {
+            const barChartDiv = document.querySelector('.barChart')
+            testBarChart.clear(barChartDiv)
+            if (status) {
+                testBarChart.clearRwdListener()
+                testBarChart.defaultDraw(dataSet, '.barChart')
+            } else {
+                testBarChart.rwdDraw(dataSet, '.barChart', barChartDiv)
+            }
+        }
+
+        return {
+            barChartTypeSwitch,
+            changeBarChartType
+        }
     }
 })
 </script>

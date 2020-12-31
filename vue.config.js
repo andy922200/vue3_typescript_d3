@@ -1,5 +1,5 @@
 module.exports = {
-    publicPath: './',
+    publicPath: process.env.NODE_ENV === 'production' ? '/vue3_typescript_d3/' : './',
     css: {
         extract: true,
         sourceMap: true
