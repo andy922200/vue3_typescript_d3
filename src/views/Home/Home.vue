@@ -24,7 +24,7 @@ import {
 export default defineComponent({
     name: 'Home',
     setup () {
-        const dataSet = reactive([70, 130, 120, 95, 170, 143, 180, 250, 300])
+        const dataSet = reactive([70, 130, 120, 95, 170, 143])
         const barChartSettings = {
             width: 400,
             height: 400,
