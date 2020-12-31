@@ -27,7 +27,6 @@ import {
     ref,
     reactive,
     onMounted,
-    onUnmounted,
     defineComponent
 } from 'vue'
 import {
@@ -64,12 +63,9 @@ export default defineComponent({
         const testBarChart = new BarChart(barChartSettings)
 
         onMounted(() => {
-            testBarChart.defaultDraw(dataSet, '.barChart')
-        })
-
-        onUnmounted(() => {
             const barChartDiv = document.querySelector('.barChart')
             testBarChart.clear(barChartDiv)
+            testBarChart.defaultDraw(dataSet, '.barChart')
         })
 
         function changeBarChartType (status: boolean) {
