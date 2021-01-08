@@ -69,6 +69,7 @@ export class BarChart implements CleanMethods {
 
         this.generateBars(dataSet, svg)
         this.generateTexts(dataSet, svg)
+        this.generateYAxis(svg, [0, 500], [380, 0])
     }
 
     rwdDraw (dataSet: (Array<number>), dom: string, rwdBarChartDiv: Element | null) {
@@ -195,5 +196,14 @@ export class BarChart implements CleanMethods {
                     return d.toString()
                 })
         }
+    }
+
+    private generateYAxis (svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, domain: (Array<number>), range: (Array<number>)) {
+        const _this = this
+        const y = d3.scaleLinear().domain(domain).range(range)
+        svg.append('g')
+            .call(d3.axisLeft(y))
+            .attr('fill', 'none')
+            .attr('stroke', '#000').attr('transform', 'translate(10,0)')
     }
 }
