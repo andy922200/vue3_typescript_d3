@@ -7,6 +7,19 @@
         font-weight: bold;
     }
 
+    .logos {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+
+        .logo {
+            padding: 5px;
+            width: 33.33333%;
+            max-width: 100px;
+            height: 100px;
+        }
+    }
+
     .router-link-active {
         color: #42b983;
     }

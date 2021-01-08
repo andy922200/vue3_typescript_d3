@@ -1,24 +1,5 @@
 .home {
+    display: flex;
+    justify-content: center;
     width: 100%;
-
-    .logos {
-        display: flex;
-        justify-content: center;
-
-        .logo {
-            padding: 5px;
-            width: 33.33333%;
-            max-width: 100px;
-            height: 100px;
-        }
-    }
-
-    .barChart {
-        overflow: hidden;
-        margin: 0 auto;
-        min-width: 300px;
-        max-width: 960px;
-        min-height: 300px;
-        max-height: 500px;
-    }
 }
