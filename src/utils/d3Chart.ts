@@ -33,6 +33,10 @@ interface BarChartSettings extends Layout{
         xAxisFontSize?: number;
         yAxisFontSize?: number;
     };
+    tooltip?: {
+        top: string;
+        left: string;
+    };
 }
 
 interface CleanMethods {
@@ -53,6 +57,7 @@ export class BarChart implements CleanMethods {
     protected gutterWidth: number;
     protected xAxisFontSize: number
     protected yAxisFontSize: number
+    protected tooltip: BarChartSettings['tooltip']
 
     constructor (settings: BarChartSettings) {
         this.width = settings.width ? settings.width : 400
@@ -73,6 +78,12 @@ export class BarChart implements CleanMethods {
             : 10
         this.xAxisFontSize = settings.text.xAxisFontSize ? settings.text.xAxisFontSize : 10
         this.yAxisFontSize = settings.text.yAxisFontSize ? settings.text.yAxisFontSize : 10
+        this.tooltip = settings.tooltip
+            ? settings.tooltip
+            : {
+                top: '0px',
+                left: '0px'
+            }
     }
 
     defaultDraw (dataSet: (Array<RawData>), dom: string) {
@@ -82,10 +93,11 @@ export class BarChart implements CleanMethods {
             .attr('width', _this.width)
             .attr('height', _this.height)
 
-        this.generateBars(dataSet, svg)
+        const bars = this.generateBars(dataSet, svg)
         this.generateTexts(dataSet, svg)
         this.generateXAxis(dataSet, svg)
         this.generateYAxis(svg)
+        this.generateTooltip(domSelector, bars)
     }
 
     rwdDraw (dataSet: (Array<RawData>), dom: string, rwdBarChartDiv: Element | null) {
@@ -124,10 +136,11 @@ export class BarChart implements CleanMethods {
         const svg = domSelector.append('svg')
             .attr('width', width)
             .attr('height', height)
-        this.generateBars(dataSet, svg, width, height)
+        const bars = this.generateBars(dataSet, svg, width, height)
         this.generateTexts(dataSet, svg, width, height)
         this.generateXAxis(dataSet, svg, width, height)
         this.generateYAxis(svg, width, height)
+        this.generateTooltip(domSelector, bars)
     }
 
     private generateBars (dataSet: (Array<RawData>), svg: d3.Selection<SVGSVGElement, unknown, HTMLElement, any>, width?: number, height?: number) {
@@ -275,5 +288,44 @@ export class BarChart implements CleanMethods {
                 .attr('stroke', '#000')
                 .attr('transform', `translate(${this.padding.left - 1},${this.padding.top})`)
         }
+    }
+
+    private generateTooltip (domSelector: d3.Selection<d3.BaseType, unknown, HTMLElement, any>, bars: d3.Selection<SVGRectElement, number, SVGSVGElement, unknown>) {
+        const _this = this
+        const tooltip = domSelector.append('div')
+            .style('opacity', 0)
+            .attr('class', 'tooltip')
+            .style('position', 'absolute')
+            .style('background-color', 'white')
+            .style('border', 'solid')
+            .style('border-width', '2px')
+            .style('border-radius', '5px')
+            .style('padding', '5px')
+
+        bars.on('mouseover', function () {
+            tooltip
+                .style('opacity', 1)
+            d3.select(this)
+                .style('stroke', 'black')
+                .style('opacity', 1)
+        })
+            .on('mousemove', function (event, d) {
+                _this.tooltip = _this.tooltip ? _this.tooltip : {
+                    left: '0px',
+                    top: '0px'
+                }
+
+                tooltip
+                    .html(`Number: ${d}`)
+                    .style('left', `${_this.tooltip.left}`)
+                    .style('top', `${_this.tooltip.top}`)
+            })
+            .on('mouseout', function () {
+                tooltip
+                    .style('opacity', 0)
+                d3.select(this)
+                    .style('stroke', 'none')
+                    .style('opacity', 1)
+            })
     }
 }

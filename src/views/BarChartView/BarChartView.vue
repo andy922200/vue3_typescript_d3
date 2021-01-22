@@ -85,6 +85,10 @@ export default defineComponent({
                 yAxisFontSize: 9,
                 dy: '1em'
             },
+            tooltip: {
+                left: '45%',
+                top: '25%'
+            },
             maxValue: 500
         }
         const testBarChart = new BarChart(barChartSettings)
